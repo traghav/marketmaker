@@ -1,17 +1,19 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    
     <HelloWorld/>
+    <Vanilla/>
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld'
-
+import Vanilla from './components/Vanilla'
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    HelloWorld,
+    Vanilla
   }
 }
 </script>
@@ -19,7 +21,7 @@ export default {
 <style>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: anti aliased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
