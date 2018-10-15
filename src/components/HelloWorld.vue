@@ -7,6 +7,7 @@
     <input v-model="orderB" placeholder="Order Quantity B">
     <button v-on:click="placeBorder">Buy B</button>
     <hr>
+    <hr>
     {{b}}
     {{outstandingA}}
     {{outstandingB}}

@@ -17,3 +17,10 @@ npm run build
 # build for production and view the bundle analyzer report
 npm run build --report
 ```
+## Color Scheme
+
+Black: 	2B2B2B
+Cream: 	F2E8C3
+Yellow: F5A219
+Orange: F27612
+Red:	DA2A04
