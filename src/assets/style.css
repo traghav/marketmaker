@@ -4,4 +4,75 @@ body {
 h1,h2, h3, h4, h5, h6{
 	color: #F27612;
 }
+.transaction #logs {
+		padding: 0px;
+		font-family: monospace;
+		font-size: 14px; 
+	}
+.component {
+  margin: 20px;
+}
+.title {
+  text-align: center;
+  margin: 15px;
 
+}
+.title h1 {
+  color: #F27612;
+  display: inline;
+}
+
+.reset a{
+  color: #DA2A04;
+}
+.reset {
+  display: inline;
+  margin-left: 15px;
+}
+.oddsTable table{
+  border-spacing: 10px 0;
+}
+.oddsTable td {
+  padding: 5px 0;
+}
+.orders {
+  margin: 10px;
+}
+.marketInformation h3{
+  display: inline;
+  padding: 10px;
+}
+.marketInformation {
+  margin-top: 30px;
+}
+.transaction {
+  margin: 10px;
+}
+.transaction ul {
+  list-style-type: none;
+}
+.depthChanger {
+  margin: 10px;
+  width: 360px;
+}
+@media only screen and (max-width: 432px) {
+    .depthChanger {
+	  width: 260px !important;
+	}
+	.marketInformation h3{
+	  display: block !important;
+	}
+	.oddsTable {
+	 font-size: 14px;
+	}
+	.transaction {
+	  font-size: 12px ;
+	}
+	.transaction #logs {
+		padding: 0px !important;
+		font-size: 11px;
+	}
+	.title h1 {
+		font-size: x-large;
+	}
+}

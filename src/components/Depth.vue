@@ -8,16 +8,6 @@
           </a></h1>
         </div>
     </div>
-    <div class="depthChanger">
-      <vue-slide-bar 
-        v-model="b"
-        :min="1"
-        :max="1000"
-        :processStyle="sliderCustomzie.processStyle"
-        :lineHeight="sliderCustomzie.lineHeight"
-        :tooltipStyles="sliderCustomzie.tooltipStyles">
-      </vue-slide-bar>
-    </div>
     <div class="oddsTable">
       <table>
         <tr>
@@ -64,9 +54,21 @@
       <h3>Market Depth ${{b}} </h3>
       <h3>Total Pool ${{totalPool.toFixed(2)}} </h3>
     </div>
+    <div class="depthChanger">
+      <vue-slide-bar 
+        v-model="b"
+        :min="1"
+        :max="1000"
+        :processStyle="sliderCustomzie.processStyle"
+        :lineHeight="sliderCustomzie.lineHeight"
+        :tooltipStyles="sliderCustomzie.tooltipStyles">
+      </vue-slide-bar>
+    </div>
     <div class="transaction">
       <h4 v-if="transactionLog.length>0">Transaction Log</h4>
       <ul id="logs">
+        Number of transactions {{ transactionLog.length}}
+        <p></p>
         <li v-for="log in transactionLog">
           {{ log.message }}
         </li>
@@ -208,7 +210,7 @@ export default {
       this.outstandingA+=+this.orderA
       this.totalPool+=+this.dynamicBuyPriceA
       this.transactionLog.push({
-        message:"Bought "+(+this.orderA)+" options of Event A at $"+this.dynamicBuyPriceA.toFixed(2),
+        message:"Bought \t"+(+this.orderA)+" options of Event A at $"+this.dynamicBuyPriceA.toFixed(2),
         txType:'Buy',
         txEvent:'A',
         price:this.dynamicBuyPriceA,
@@ -222,7 +224,7 @@ export default {
       this.outstandingB+=+this.orderB
       this.totalPool+=+this.dynamicBuyPriceB
       this.transactionLog.push({
-        message:"Bought "+(+this.orderB)+" options of Event B at $"+this.dynamicBuyPriceB.toFixed(2),
+        message:"Bought \t"+(+this.orderB)+" options of Event B at $"+this.dynamicBuyPriceB.toFixed(2),
         txType:'Buy',
         txEvent:'B',
         price:this.dynamicBuyPriceB,
@@ -236,7 +238,7 @@ export default {
         this.outstandingA-=+this.orderA
         this.totalPool-=+this.dynamicSellPriceA
         this.transactionLog.push({
-        message: "Sold "+(+this.orderA)+" options of Event A at $"+this.dynamicSellPriceA.toFixed(2),
+        message: "Sold \t"+(+this.orderA)+" options of Event A at $"+this.dynamicSellPriceA.toFixed(2),
         txType:'Sell',
         txEvent:'A',
         price:this.dynamicSellPriceB,
@@ -254,7 +256,7 @@ export default {
         this.outstandingB-=+this.orderB
         this.totalPool-=+this.dynamicSellPriceB
         this.transactionLog.push({
-          message:"Sold "+(+this.orderB)+" options of Event B at $"+this.dynamicSellPriceB.toFixed(2),
+          message:"Sold \t"+(+this.orderB)+" options of Event B at $"+this.dynamicSellPriceB.toFixed(2),
           txType:'Sell',
           txEvent:'B',
           price:this.dynamicSellPriceB,
@@ -308,46 +310,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.component {
-  margin: 20px;
-}
-.title {
-  text-align: center;
-  margin: 15px;
 
-}
-.title h1 {
-  color: #F27612;
-  display: inline;
-}
 
-.reset a{
-  color: #DA2A04;
-}
-.reset {
-  display: inline;
-  margin-left: 15px;
-}
-.oddsTable table{
-  border-spacing: 10px 0;
-}
-.oddsTable td {
-  padding: 5px 0;
-}
-.orders {
-  margin: 10px;
-}
-.marketInformation h3{
-  display: inline;
-  padding: 10px;
-}
-.marketInformation {
-  margin-top: 30px;
-}
-.transaction {
-  margin: 10px;
-}
-.transaction ul {
-  list-style-type: none;
-}
+
 </style>

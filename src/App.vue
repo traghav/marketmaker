@@ -2,7 +2,7 @@
   <div id="app">
     
     <!-- <HelloWorld/> -->
-    <!-- <Vanilla/> -->
+    <Vanilla/>
     <Depth />
   </div>
 </template>

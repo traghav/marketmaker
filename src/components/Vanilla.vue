@@ -217,46 +217,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.component {
-  margin: 20px;
-}
-.title {
-  text-align: center;
-  margin: 15px;
 
-}
-.title h1 {
-  color: #F27612;
-  display: inline;
-}
-
-.reset a{
-  color: #DA2A04;
-}
-.reset {
-  display: inline;
-  margin-left: 15px;
-}
-.oddsTable table{
-  border-spacing: 10px 0;
-}
-.oddsTable td {
-  padding: 5px 0;
-}
-.orders {
-  margin: 10px;
-}
-.marketInformation h3{
-  display: inline;
-  padding: 10px;
-}
-.marketInformation {
-  margin-top: 30px;
-}
-.transaction {
-  margin: 10px;
-}
-.transaction ul {
-  list-style-type: none;
-}
 </style>

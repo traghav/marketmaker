@@ -19,7 +19,7 @@ npm run build --report
 ```
 ## Color Scheme
 
-Black: 	2B2B2B
+Black: 	2c3e50
 Cream: 	fffdf9
 Yellow: F5A219
 Orange: F27612
