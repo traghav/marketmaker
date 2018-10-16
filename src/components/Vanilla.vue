@@ -6,9 +6,29 @@
         <i class="fa fa-refresh"></i>
       </a></h1>
     </div>
-    <h3>Option Price A ${{priceA.toFixed(4)}} | Option Price B ${{priceB.toFixed(4)}}</h3>
-    <h3>Decimal Odds A {{(1/priceA).toFixed(2)}} | Decimal Odds B {{(1/priceB).toFixed(2)}}</h3>
-    <h3>Fraction Odds A {{ convertToFraction(1/priceA.toFixed(4)-1)}} | Fraction Odds B {{ convertToFraction(1/priceB.toFixed(4)-1)}}</h3>
+    <table>
+      <tr>
+        <td></td>
+        <td>Event A</td>
+        <td>Event B</td>
+      </tr>
+      <tr>
+        <td>Option Pricing</td>
+        <td>{{priceA.toFixed(4)}}</td>
+        <td>{{priceB.toFixed(4)}}</td>
+      </tr>
+      <tr>
+        <td>Decimal Odds</td>
+        <td>{{(1/priceA).toFixed(2)}}</td>
+        <td>{{(1/priceB).toFixed(2)}}</td>
+      </tr>
+      <tr>
+        <td>Fraction Odds</td>
+        <td>{{convertToFraction(1/priceA.toFixed(4)-1)}}</td>
+        <td>{{convertToFraction(1/priceB.toFixed(4)-1)}}</td>
+      </tr>
+    </table>
+
     <input v-model="orderA" v-on:keypress="isNumber(event)" placeholder="Order Quantity A" v-on:input="dynamicPrice">
     
     <p></p>
@@ -40,7 +60,6 @@ export default {
   data () {
     return {
         msg: 'Buy and Sell',
-        initData:[],
         outstandingA: 0,
         outstandingB: 0,
         orderA:0,
@@ -60,7 +79,6 @@ export default {
     initFunc(){
       
       this.msg= 'Buy and Sell'
-      this.initData=[]
       this.outstandingA= 0
       this.outstandingB= 0
       this.orderA=0
@@ -68,12 +86,9 @@ export default {
       this.b=100
       this.priceA=0
       this.priceB=0
-      this.dynamicBuyPriceA=0
-      this.dynamicBuyPriceB=0
-      this.dynamicSellPriceA=0
-      this.dynamicSellPriceB=0
       this.totalPool=0
       this.transactionLog=[]
+      this.updateOdds()
   
     },
     costFunction(q1,q2){
@@ -104,6 +119,8 @@ export default {
       
     },
     convertToFraction(decimal){
+        if(+decimal>10000000)
+          return "Infinity"
         var gcd = function(a, b) {
         if (b < 0.0001) return a;
         return gcd(b, Math.floor(a % b));        
@@ -119,7 +136,7 @@ export default {
       denominator /= divisor;
       return (Math.floor(numerator) + '/' + Math.floor(denominator))                      
     },
-    updatePrice(){
+    updateOdds(){
       
       
       this.e=2.71828
@@ -134,7 +151,7 @@ export default {
       this.totalPool+=+this.dynamicBuyPriceA
       this.transactionLog.push("Bought "+(+this.orderA)+" options of event A at $"+this.dynamicBuyPriceA.toFixed(2))
       this.orderA=0
-      this.updatePrice()
+      this.updateOdds()
       
     },
     placeBBuyorder() {
@@ -142,7 +159,7 @@ export default {
       this.totalPool+=+this.dynamicBuyPriceB
       this.transactionLog.push("Bought "+(+this.orderB)+" options of event B at $"+this.dynamicBuyPriceB.toFixed(2))
       this.orderB=0
-      this.updatePrice()
+      this.updateOdds()
     },
     placeASellorder() {
       if(this.outstandingA>=this.orderA) {
@@ -150,7 +167,7 @@ export default {
         this.totalPool-=+this.dynamicSellPriceA
       this.transactionLog.push("Sold "+(+this.orderA)+" options of event A at $"+this.dynamicSellPriceA.toFixed(2))
         this.orderA=0
-        this.updatePrice()
+        this.updateOdds()
       }
       else
         alert("Not enough outstanding orders for A")
@@ -162,7 +179,7 @@ export default {
         this.totalPool-=+this.dynamicSellPriceB
       this.transactionLog.push("Sold "+(+this.orderB)+" options of event B at $"+this.dynamicSellPriceB.toFixed(2))
         this.orderB=0
-        this.updatePrice()
+        this.updateOdds()
       }
       else
         alert("Not enough outstanding orders for B")
@@ -172,7 +189,7 @@ export default {
 
   },
   mounted () {
-    this.updatePrice();
+    this.updateOdds();
   }
   
 }
@@ -185,12 +202,15 @@ h1, h2 {
 
 }
 h1 {
-  display: inline;
+  
   color: #F27612;
+  text-align: center;
 }
 
 .reset {
-  display: inline-block;
+  float: right;
+  float: top;
+  
   margin-left: 15px;
 }
 .reset a {

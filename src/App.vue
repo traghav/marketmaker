@@ -9,7 +9,7 @@
 <script>
 import HelloWorld from './components/HelloWorld'
 import Vanilla from './components/Vanilla'
-//import './assets/font-awesome-4.7.0/css/font-awesome.min.css'
+import './assets/font-awesome-4.7.0/css/font-awesome.css'
 export default {
   name: 'App',
   components: {
@@ -25,7 +25,7 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: anti aliased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /*text-align: center;*/
   color: #2c3e50;
   margin-top: 60px;
 }
