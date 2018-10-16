@@ -1,33 +1,42 @@
 <template>
   <div class="component">
-    <h1>{{ msg }}</h1>
-    <div class="reset">
-      <h1><a href="#" v-on:click="initFunc">
-        <i class="fa fa-refresh"></i>
-      </a></h1>
+      <div class="title">
+      <h1>{{ msg }}</h1>
+      <div class="reset">
+        <h1><a href="#" v-on:click="initFunc">
+          <i class="fa fa-undo"></i>
+        </a></h1>
+      </div>
     </div>
-    <table>
-      <tr>
-        <td></td>
-        <td>Event A</td>
-        <td>Event B</td>
-      </tr>
-      <tr>
-        <td>Option Pricing</td>
-        <td>{{priceA.toFixed(4)}}</td>
-        <td>{{priceB.toFixed(4)}}</td>
-      </tr>
-      <tr>
-        <td>Decimal Odds</td>
-        <td>{{(1/priceA).toFixed(2)}}</td>
-        <td>{{(1/priceB).toFixed(2)}}</td>
-      </tr>
-      <tr>
-        <td>Fraction Odds</td>
-        <td>{{convertToFraction(1/priceA.toFixed(4)-1)}}</td>
-        <td>{{convertToFraction(1/priceB.toFixed(4)-1)}}</td>
-      </tr>
-    </table>
+    <div class="oddsTable">
+      <table>
+        <tr>
+          <td></td>
+          <td>Event A</td>
+          <td>Event B</td>
+        </tr>
+        <tr>
+          <td>Option pricing</td>
+          <td>{{priceA.toFixed(4)}}</td>
+          <td>{{priceB.toFixed(4)}}</td>
+        </tr>
+        <tr>
+          <td>Decimal odds</td>
+          <td>{{(1/priceA).toFixed(2)}}</td>
+          <td>{{(1/priceB).toFixed(2)}}</td>
+        </tr>
+        <tr>
+          <td>Fraction odds</td>
+          <td>{{convertToFraction(1/priceA.toFixed(4)-1)}}</td>
+          <td>{{convertToFraction(1/priceB.toFixed(4)-1)}}</td>
+        </tr>
+        <tr>
+          <td>Outstanding orders</td>
+          <td>{{outstandingA}}</td>
+          <td>{{outstandingB}}</td>
+        </tr>
+      </table>
+    </div>
 
     <input v-model="orderA" v-on:keypress="isNumber(event)" placeholder="Order Quantity A" v-on:input="dynamicPrice">
     
@@ -43,13 +52,14 @@
     
     <h3>Market Depth ${{b}} </h3>
     <h3>Total Pool ${{totalPool.toFixed(2)}} </h3>
-    <h4>Outstanding orders for A  {{outstandingA}}</h4>
-    <h4>Outstanding orders for B  {{outstandingB}}</h4>
-    <ul id="logs">
-    <li v-for="log in transactionLog">
-      {{ log }}
-    </li>
-  </ul>
+    <div class="transaction">
+      <h4 v-if="transactionLog.length>0">Transaction Log</h4>
+      <ul id="logs">
+        <li v-for="log in transactionLog">
+          {{ log }}
+        </li>
+      </ul>
+    </div>
     <hr>
   </div>
 </template>
@@ -60,6 +70,7 @@ export default {
   data () {
     return {
         msg: 'Buy and Sell',
+        event:'',
         outstandingA: 0,
         outstandingB: 0,
         orderA:0,
@@ -91,6 +102,13 @@ export default {
       this.updateOdds()
   
     },
+    playScenario(){
+      for (var i = 1; i <= 10; i++) {
+        this.orderA=1;
+        this.dynamicPrice();
+        this.placeABuyorder();
+      }
+    },
     costFunction(q1,q2){
       this.e=2.71828
       this.prelog1=Math.pow(this.e,(q1/this.b))
@@ -103,7 +121,6 @@ export default {
       this.dynamicBuyPriceA=this.costFunction(this.outstandingA+(+this.orderA),this.outstandingB)-this.cf
       this.dynamicSellPriceA=this.cf-this.costFunction(this.outstandingA-(+this.orderA),this.outstandingB)
       this.dynamicBuyPriceB=this.costFunction(this.outstandingA,this.outstandingB+(+this.orderB))-this.cf
-      
       this.dynamicSellPriceB=this.cf-this.costFunction(this.outstandingA,this.outstandingB-(+this.orderB))
     },
     isNumber: function(evt) {
@@ -149,7 +166,7 @@ export default {
     placeABuyorder() {
       this.outstandingA+=+this.orderA
       this.totalPool+=+this.dynamicBuyPriceA
-      this.transactionLog.push("Bought "+(+this.orderA)+" options of event A at $"+this.dynamicBuyPriceA.toFixed(2))
+      this.transactionLog.push("Bought "+(+this.orderA)+" options of Event A at $"+this.dynamicBuyPriceA.toFixed(2))
       this.orderA=0
       this.updateOdds()
       
@@ -157,7 +174,7 @@ export default {
     placeBBuyorder() {
       this.outstandingB+=+this.orderB
       this.totalPool+=+this.dynamicBuyPriceB
-      this.transactionLog.push("Bought "+(+this.orderB)+" options of event B at $"+this.dynamicBuyPriceB.toFixed(2))
+      this.transactionLog.push("Bought "+(+this.orderB)+" options of Event B at $"+this.dynamicBuyPriceB.toFixed(2))
       this.orderB=0
       this.updateOdds()
     },
@@ -165,7 +182,7 @@ export default {
       if(this.outstandingA>=this.orderA) {
         this.outstandingA-=+this.orderA
         this.totalPool-=+this.dynamicSellPriceA
-      this.transactionLog.push("Sold "+(+this.orderA)+" options of event A at $"+this.dynamicSellPriceA.toFixed(2))
+      this.transactionLog.push("Sold "+(+this.orderA)+" options of Event A at $"+this.dynamicSellPriceA.toFixed(2))
         this.orderA=0
         this.updateOdds()
       }
@@ -177,7 +194,7 @@ export default {
       if(this.outstandingB>=this.orderB) {
         this.outstandingB-=+this.orderB
         this.totalPool-=+this.dynamicSellPriceB
-      this.transactionLog.push("Sold "+(+this.orderB)+" options of event B at $"+this.dynamicSellPriceB.toFixed(2))
+      this.transactionLog.push("Sold "+(+this.orderB)+" options of Event B at $"+this.dynamicSellPriceB.toFixed(2))
         this.orderB=0
         this.updateOdds()
       }
@@ -190,6 +207,7 @@ export default {
   },
   mounted () {
     this.updateOdds();
+    this.playScenario();
   }
   
 }
@@ -201,19 +219,33 @@ h1, h2 {
   font-weight: normal;
 
 }
-h1 {
+h1 { 
   
-  color: #F27612;
+}
+.title {
   text-align: center;
+  margin: 15px;
+
+}
+.title h1 {
+  color: #F27612;
+  display: inline;
 }
 
+.reset a{
+  color: #DA2A04;
+}
 .reset {
-  float: right;
-  float: top;
-  
+  display: inline;
   margin-left: 15px;
 }
-.reset a {
-  color: #DA2A04;
+.oddsTable table{
+  border-spacing: 20px 0;
+}
+.oddsTable td {
+  padding: 5px 0;
+}
+.transaction ul {
+  list-style-type: none;
 }
 </style>
