@@ -10,6 +10,7 @@
 import HelloWorld from './components/HelloWorld'
 import Vanilla from './components/Vanilla'
 import './assets/font-awesome-4.7.0/css/font-awesome.css'
+import './assets/style.css'
 export default {
   name: 'App',
   components: {
@@ -27,7 +28,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   /*text-align: center;*/
   color: #2c3e50;
-  background: #fffdf9;
   margin-top: 60px;
 }
 </style>

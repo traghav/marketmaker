@@ -1,12 +1,12 @@
 <template>
   <div class="component">
-      <div class="title">
-      <h1>{{ msg }}</h1>
-      <div class="reset">
-        <h1><a href="#" v-on:click="initFunc">
-          <i class="fa fa-undo"></i>
-        </a></h1>
-      </div>
+    <div class="title">
+        <h1>{{ msg }}</h1>
+        <div class="reset">
+          <h1><a href="#" v-on:click="initFunc">
+            <i class="fa fa-undo"></i>
+          </a></h1>
+        </div>
     </div>
     <div class="oddsTable">
       <table>
@@ -37,21 +37,23 @@
         </tr>
       </table>
     </div>
-
-    <input v-model="orderA" v-on:keypress="isNumber(event)" placeholder="Order Quantity A" v-on:input="dynamicPrice">
-    
-    <p></p>
-    <button v-on:click="placeABuyorder">Buy {{+this.orderA}} A options for ${{dynamicBuyPriceA.toFixed(2)}} </button>
-    <button v-on:click="placeASellorder">Sell {{+this.orderA}} A options for ${{dynamicSellPriceA.toFixed(2)}}</button>
-    <p></p>
-    <input v-model="orderB" v-on:keypress="isNumber(event)" placeholder="Order Quantity B" v-on:input="dynamicPrice">
-    
-    <p></p>
-    <button v-on:click="placeBBuyorder">Buy {{+this.orderB}} B options for ${{dynamicBuyPriceB.toFixed(2)}}</button>
-    <button v-on:click="placeBSellorder">Sell {{+this.orderB}} B options  for ${{dynamicSellPriceB.toFixed(2)}}</button>
-    
-    <h3>Market Depth ${{b}} </h3>
-    <h3>Total Pool ${{totalPool.toFixed(2)}} </h3>
+    <div class="orders">
+      <input v-model="orderA" v-on:keypress="isNumber(event)" placeholder="Order Quantity A" v-on:input="dynamicPrice">
+      
+      <p></p>
+      <button v-on:click="placeABuyorder">Buy {{+this.orderA}} A options for ${{dynamicBuyPriceA.toFixed(2)}} </button>
+      <button v-on:click="placeASellorder">Sell {{+this.orderA}} A options for ${{dynamicSellPriceA.toFixed(2)}}</button>
+      <p></p>
+      <input v-model="orderB" v-on:keypress="isNumber(event)" placeholder="Order Quantity B" v-on:input="dynamicPrice">
+      
+      <p></p>
+      <button v-on:click="placeBBuyorder">Buy {{+this.orderB}} B options for ${{dynamicBuyPriceB.toFixed(2)}}</button>
+      <button v-on:click="placeBSellorder">Sell {{+this.orderB}} B options  for ${{dynamicSellPriceB.toFixed(2)}}</button>
+    </div>
+    <div class="marketInformation">
+      <h3>Market Depth ${{b}} </h3>
+      <h3>Total Pool ${{totalPool.toFixed(2)}} </h3>
+    </div>
     <div class="transaction">
       <h4 v-if="transactionLog.length>0">Transaction Log</h4>
       <ul id="logs">
@@ -69,7 +71,7 @@ export default {
   name: 'Vanilla',
   data () {
     return {
-        msg: 'Buy and Sell',
+        msg: 'Logarithmic Market Scoring',
         event:'',
         outstandingA: 0,
         outstandingB: 0,
@@ -89,7 +91,7 @@ export default {
   methods: {
     initFunc(){
       
-      this.msg= 'Buy and Sell'
+      this.msg= 'Logarithmic Market Scoring'
       this.outstandingA= 0
       this.outstandingB= 0
       this.orderA=0
@@ -103,8 +105,8 @@ export default {
   
     },
     playScenario(){
-      for (var i = 1; i <= 10; i++) {
-        this.orderA=1;
+      for (var i = 1; i <= 7; i++) {
+        this.orderA=2;
         this.dynamicPrice();
         this.placeABuyorder();
       }
@@ -215,12 +217,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-
-}
-h1 { 
-  
+.component {
+  margin: 20px;
 }
 .title {
   text-align: center;
@@ -240,10 +238,23 @@ h1 {
   margin-left: 15px;
 }
 .oddsTable table{
-  border-spacing: 20px 0;
+  border-spacing: 10px 0;
 }
 .oddsTable td {
   padding: 5px 0;
+}
+.orders {
+  margin: 10px;
+}
+.marketInformation h3{
+  display: inline;
+  padding: 10px;
+}
+.marketInformation {
+  margin-top: 30px;
+}
+.transaction {
+  margin: 10px;
 }
 .transaction ul {
   list-style-type: none;
