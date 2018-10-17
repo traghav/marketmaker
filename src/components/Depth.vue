@@ -67,8 +67,9 @@
     <div class="transaction">
       <h4 v-if="transactionLog.length>0">Transaction Log</h4>
       <ul id="logs">
+        <p>
         Number of transactions {{ transactionLog.length}}
-        <p></p>
+        </p>
         <li v-for="log in transactionLog">
           {{ log.message }}
         </li>
@@ -101,7 +102,8 @@ export default {
         sliderCustomzie: {
           lineHeight: 10,
           processStyle: { 
-            backgroundColor: '#DA2A04' 
+            backgroundColor: '#DA2A04'
+
           },
           tooltipStyles: { 
             backgroundColor: '#F27612',
@@ -142,15 +144,11 @@ export default {
     },
     playScenario(){      
       for (var i = 1; i <= 7; i++) {
-        this.orderB=40;
+        this.orderB=42;
         this.dynamicPrice();
         this.placeBBuyorder();
       }
       
-    },
-    depthChange(){
-      alert("change")
-      console.log("23")
     },
     costFunction(q1,q2){
       this.e=2.71828

@@ -57,6 +57,9 @@
     <div class="transaction">
       <h4 v-if="transactionLog.length>0">Transaction Log</h4>
       <ul id="logs">
+        <p>
+        Number of transactions {{ transactionLog.length}}
+        </p>
         <li v-for="log in transactionLog">
           {{ log }}
         </li>
