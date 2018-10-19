@@ -118,6 +118,23 @@
         <h3>Market Depth ${{b}} </h3>
         <h3>Total Pool ${{totalPool.toFixed(2)}} </h3>
       </div>
+      <div class="chart">
+        <trend
+        :data="orderHistoryA"
+        :gradient="['#F27612', '#F27612', '#F27612']"
+        auto-draw
+        smooth>
+      </trend>
+      
+        <trend
+          :data="orderHistoryB"
+          :gradient="['#DA2A04', '#DA2A04', '#DA2A04']"
+          auto-draw
+          smooth>
+        </trend>
+        <span class="A"><i class="fa fa-circle"></i> Trend Line A</span>
+        <span class="B"><i class="fa fa-circle"></i> Trend Line B</span>
+      </div>
 
       <div class="transaction">
         <h4 v-if="transactionLog.length>0">Transaction Log</h4>
@@ -132,16 +149,17 @@
       </div>
       <hr>
     </div>
-    
   </div>
 </template>
-<script src="https://unpkg.com/chart.js@2.7.1/dist/Chart.bundle.js"></script>
-<script src="https://unpkg.com/chartkick@2.3.3"></script>
-<script src="https://unpkg.com/vue-chartkick@0.2.1/dist/vue-chartkick.js"></script>
+
 <script>
+import LineChart from './LineChart.js'
 
 export default {
   name: 'Simulator',
+  components: {
+      LineChart
+    },
   data () {
     return {
         msg: 'Market Simulator',
@@ -160,7 +178,7 @@ export default {
         totalPool:0,
         mean:50,
         variance:10,
-        orderAmount:500,
+        orderAmount:100,
         depthdecider: false,
         transactionLog:[],
         sliderCustomzie: {
@@ -173,7 +191,10 @@ export default {
             backgroundColor: '#F27612',
             borderColor: '#F27612' 
           }
-        }
+        },
+        orderHistoryB:[0.5,0.5],
+        orderHistoryA:[0.5,0.5],
+
       }
   },
   methods: {
@@ -190,9 +211,12 @@ export default {
       this.orderAmount=100
       this.priceA=0
       this.priceB=0
+      this.priceHistoryA=[]
       this.totalPool=0
       this.depthdecider=false
       this.transactionLog=[]
+      this.orderHistoryA=[]
+      this.orderHistoryB=[]
       this.updateOdds()
   
     },
@@ -205,7 +229,6 @@ export default {
 
     playScenario(){
       var sigma=Math.sqrt(this.variance/100)
-      
       for (var i = 0; i < this.orderAmount; i++) {
         var truth=this.randn_bm()
         while(true) {
@@ -293,6 +316,10 @@ export default {
         price:this.dynamicBuyPriceA,
         orderValue:+this.orderA
       })
+      if(this.transactionLog.length%10==0) {
+        this.orderHistoryA.push(this.dynamicBuyPriceA)
+        this.orderHistoryB.push(this.dynamicBuyPriceB)
+      }
       this.orderA=0
       this.updateOdds()
       
@@ -307,6 +334,10 @@ export default {
         price:this.dynamicBuyPriceB,
         orderValue:+this.orderB
       })
+      if(this.transactionLog.length%10==0) {
+        this.orderHistoryA.push(this.dynamicBuyPriceA)
+        this.orderHistoryB.push(this.dynamicBuyPriceB)
+      }
       this.orderB=0
       this.updateOdds()
     },
@@ -321,6 +352,10 @@ export default {
         price:this.dynamicSellPriceB,
         orderValue:+this.orderA
         })
+        if(this.transactionLog.length%10==0) {
+        this.orderHistoryA.push(this.dynamicBuyPriceA)
+        this.orderHistoryB.push(this.dynamicBuyPriceB)
+      }
         this.orderA=0
         this.updateOdds()
       }
@@ -339,6 +374,10 @@ export default {
           price:this.dynamicSellPriceB,
           orderValue:+this.orderB
         })
+        if(this.transactionLog.length%100==0) {
+        this.orderHistoryA.push(this.dynamicBuyPriceA)
+        this.orderHistoryB.push(this.dynamicBuyPriceB)
+        }
         this.orderB=0
         this.updateOdds()
       }
@@ -356,6 +395,7 @@ export default {
   },
   mounted () {
     this.updateOdds();
+    
 
   }
   
@@ -364,48 +404,72 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.mean {
-  width: 260px;
+  .component {
+    position: relative;
+  }
+  .mean {
+    width: 260px;
+    
+  }
+  .mean h4{
+    margin-bottom: 10px;
+  }
+  .leftmean h5{
+    display: inline;
+    text-align: left;
+  }
+  .rightmean h5{
+    display: inline;
+
+  }
+  .rightmean {
+    float: right;
+  }
+
+
+  .variance {
+    width: 260px;
+    
+  }
+  .variance h4{
+    margin-bottom: 10px;
+  }
+  .leftvariance h5{
+    display: inline;
+    text-align: center;
+  }
+
+  .orderAmount {
+    width: 260px;
+    
+  }
+  .orderAmount h4{
+    margin-bottom: 10px;
+  }
+  .orderAmount h5{
+    display: inline;
+    text-align: center;
+  }
+  .chart {
+    max-width: 600px;
+    position: absolute;
+    top: 40px;
+    padding: 15px;
+    right: 16px;
+    
   
-}
-.mean h4{
-  margin-bottom: 10px;
-}
-.leftmean h5{
-  display: inline;
-  text-align: left;
-}
-.rightmean h5{
-  display: inline;
-
-}
-.rightmean {
-  float: right;
-}
-
-
-.variance {
-  width: 260px;
-  
-}
-.variance h4{
-  margin-bottom: 10px;
-}
-.leftvariance h5{
-  display: inline;
-  text-align: center;
-}
-
-.orderAmount {
-  width: 260px;
-  
-}
-.orderAmount h4{
-  margin-bottom: 10px;
-}
-.orderAmount h5{
-  display: inline;
-  text-align: center;
-}
-
+  }
+  .chart .A {
+    color:#F27612;
+    text-align: left;
+  }
+  .chart .B {
+    color:#DA2A04;
+    float: right;
+  }
+  @media only screen and (max-width: 800px) {
+    .chart {
+      display: none;
+    }
+  }
 </style>
