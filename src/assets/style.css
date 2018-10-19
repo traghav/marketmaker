@@ -55,6 +55,30 @@ h1,h2, h3, h4, h5, h6{
   margin: 10px;
   width: 360px;
 }
+  .chartRegion {
+    position: absolute;
+    margin: 100px;
+    right: 0;
+    top: 0;
+  }
+  .chart {
+    position: absolute;
+    
+  
+  }
+  .chartRegion .A {
+    color:#F27612;
+    
+  }
+  .chartRegion .B {
+    color:#DA2A04;
+    float: right;
+  }
+  @media only screen and (max-width: 785px) {
+    .chartRegion {
+      display: none;
+    }
+  }
 @media only screen and (max-width: 432px) {
     .depthChanger {
 	  width: 260px !important;

@@ -118,32 +118,40 @@
         <h3>Market Depth ${{b}} </h3>
         <h3>Total Pool ${{totalPool.toFixed(2)}} </h3>
       </div>
-      <div class="chart">
-        <trend
-        :data="orderHistoryA"
-        :gradient="['#F27612', '#F27612', '#F27612']"
-        auto-draw
-        smooth>
-      </trend>
-      
-        <trend
+      <div class="chartRegion">
+        <div class="chart">
+          <trend
+          :data="orderHistoryA"
+          :gradient="['#F27612', '#F27612', '#F27612']"
+          auto-draw
+          smooth>
+          </trend>
+        </div>
+        <div class="chart2">
+          <trend
           :data="orderHistoryB"
           :gradient="['#DA2A04', '#DA2A04', '#DA2A04']"
           auto-draw
           smooth>
-        </trend>
+          </trend>
+        </div>
         <span class="A"><i class="fa fa-circle"></i> Trend Line A</span>
         <span class="B"><i class="fa fa-circle"></i> Trend Line B</span>
-      </div>
+       </div>
+    
 
-      <div class="transaction">
-        <h4 v-if="transactionLog.length>0">Transaction Log</h4>
-        <ul id="logs">
+      <div class="transaction" v-if="transactionLog.length>0">
+        <button v-on:click="txDisplay=!txDisplay"> 
+          <h4>Transaction Log</h4>
+        </button>
+        <ul id="logs" v-if="txDisplay">
           <p>
-          Number of transactions {{ transactionLog.length}}
+          Number of transactions {{totalTx}}
           </p>
           <li v-for="log in transactionLog">
-            {{ log.message }}
+            {{ log.messageA }}
+            <br>
+            {{ log.messageB }}
           </li>
         </ul>
       </div>
@@ -178,6 +186,8 @@ export default {
         totalPool:0,
         mean:50,
         variance:10,
+        totalTx:0,
+        txDisplay:false,
         orderAmount:100,
         depthdecider: false,
         transactionLog:[],
@@ -192,8 +202,8 @@ export default {
             borderColor: '#F27612' 
           }
         },
-        orderHistoryB:[0.5,0.5],
-        orderHistoryA:[0.5,0.5],
+        orderHistoryB:[0,0.5],
+        orderHistoryA:[1,0.5],
 
       }
   },
@@ -206,6 +216,7 @@ export default {
       this.orderA=0
       this.orderB=0
       this.b=100
+      this.totalTx=0
       this.mean=50
       this.variance=10
       this.orderAmount=100
@@ -215,8 +226,8 @@ export default {
       this.totalPool=0
       this.depthdecider=false
       this.transactionLog=[]
-      this.orderHistoryA=[]
-      this.orderHistoryB=[]
+      this.orderHistoryA=[0.5,0.5]
+      this.orderHistoryB=[0.5,0.5]
       this.updateOdds()
   
     },
@@ -229,8 +240,13 @@ export default {
 
     playScenario(){
       var sigma=Math.sqrt(this.variance/100)
+      var eventAHit=0
+      var eventBHit=0
+      var totalAPrice=0
+      var totalBPrice=0
+      var truth=0
       for (var i = 0; i < this.orderAmount; i++) {
-        var truth=this.randn_bm()
+        this.totalTx++
         while(true) {
           truth=this.randn_bm()
           truth=(truth*sigma)+(this.mean/100)
@@ -239,16 +255,31 @@ export default {
         }
         
         if((+this.priceA)<truth){
+          var totalPool=this.totalPool
+          eventAHit++
           this.orderA=1
           this.dynamicPrice()
           this.placeABuyorder()
+          totalAPrice+=this.totalPool-totalPool
         }
         else {
+          var totalPool=this.totalPool
+          eventBHit++
           this.orderB=1
           this.dynamicPrice()
           this.placeBBuyorder()
+          totalBPrice+=this.totalPool-totalPool
         }
       }
+      this.transactionLog.push({
+        totalAhits:eventAHit,
+        totalBhits:eventBHit,
+        totalAspent:totalAPrice,
+        totalBspent:totalBPrice,
+        messageA:"Bought "+eventAHit+" A options for average price $"+(totalAPrice/eventAHit).toFixed(2),
+        messageB:"Bought "+eventBHit+" B options for average price $"+(totalBPrice/eventBHit).toFixed(2)
+      })
+      
       
     },
     costFunction(q1,q2){
@@ -309,81 +340,29 @@ export default {
     placeABuyorder() {
       this.outstandingA+=+this.orderA
       this.totalPool+=+this.dynamicBuyPriceA
-      this.transactionLog.push({
-        message:"Bought \t"+(+this.orderA)+" options of Event A at $"+this.dynamicBuyPriceA.toFixed(2),
-        txType:'Buy',
-        txEvent:'A',
-        price:this.dynamicBuyPriceA,
-        orderValue:+this.orderA
-      })
-      if(this.transactionLog.length%10==0) {
-        this.orderHistoryA.push(this.dynamicBuyPriceA)
-        this.orderHistoryB.push(this.dynamicBuyPriceB)
-      }
-      this.orderA=0
-      this.updateOdds()
+      this.finishTx()
       
     },
     placeBBuyorder() {
       this.outstandingB+=+this.orderB
       this.totalPool+=+this.dynamicBuyPriceB
-      this.transactionLog.push({
-        message:"Bought \t"+(+this.orderB)+" options of Event B at $"+this.dynamicBuyPriceB.toFixed(2),
-        txType:'Buy',
-        txEvent:'B',
-        price:this.dynamicBuyPriceB,
-        orderValue:+this.orderB
-      })
-      if(this.transactionLog.length%10==0) {
-        this.orderHistoryA.push(this.dynamicBuyPriceA)
-        this.orderHistoryB.push(this.dynamicBuyPriceB)
-      }
-      this.orderB=0
-      this.updateOdds()
-    },
-    placeASellorder() {
-      if(this.outstandingA>=this.orderA) {
-        this.outstandingA-=+this.orderA
-        this.totalPool-=+this.dynamicSellPriceA
-        this.transactionLog.push({
-        message: "Sold \t"+(+this.orderA)+" options of Event A at $"+this.dynamicSellPriceA.toFixed(2),
-        txType:'Sell',
-        txEvent:'A',
-        price:this.dynamicSellPriceB,
-        orderValue:+this.orderA
-        })
-        if(this.transactionLog.length%10==0) {
-        this.orderHistoryA.push(this.dynamicBuyPriceA)
-        this.orderHistoryB.push(this.dynamicBuyPriceB)
-      }
-        this.orderA=0
-        this.updateOdds()
-      }
-      else
-        alert("Not enough outstanding orders for A")
+      this.finishTx()
       
     },
-    placeBSellorder() {
-      if(this.outstandingB>=this.orderB) {
-        this.outstandingB-=+this.orderB
-        this.totalPool-=+this.dynamicSellPriceB
-        this.transactionLog.push({
-          message:"Sold \t"+(+this.orderB)+" options of Event B at $"+this.dynamicSellPriceB.toFixed(2),
-          txType:'Sell',
-          txEvent:'B',
-          price:this.dynamicSellPriceB,
-          orderValue:+this.orderB
-        })
-        if(this.transactionLog.length%100==0) {
+    finishTx() {
+      if(this.totalTx%10==0) {
+        this.orderA=1
+        this.orderB=1
+        this.dynamicPrice
         this.orderHistoryA.push(this.dynamicBuyPriceA)
         this.orderHistoryB.push(this.dynamicBuyPriceB)
-        }
-        this.orderB=0
-        this.updateOdds()
       }
-      else
-        alert("Not enough outstanding orders for B")
+      this.orderA=0;
+      this.orderB=0;
+      this.updateOdds();
       
+
+
     }
 
 
@@ -450,26 +429,5 @@ export default {
     display: inline;
     text-align: center;
   }
-  .chart {
-    max-width: 600px;
-    position: absolute;
-    top: 40px;
-    padding: 15px;
-    right: 16px;
-    
-  
-  }
-  .chart .A {
-    color:#F27612;
-    text-align: left;
-  }
-  .chart .B {
-    color:#DA2A04;
-    float: right;
-  }
-  @media only screen and (max-width: 800px) {
-    .chart {
-      display: none;
-    }
-  }
+
 </style>
