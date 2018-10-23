@@ -12,26 +12,26 @@
       <table>
         <tr>
           <td></td>
-          <td>Event A</td>
-          <td>Event B</td>
+          <th>Event A</th>
+          <th>Event B</th>
         </tr>
         <tr>
-          <td>Option pricing</td>
+          <th>Option pricing</th>
           <td>{{priceA.toFixed(4)}}</td>
           <td>{{priceB.toFixed(4)}}</td>
         </tr>
         <tr>
-          <td>Decimal odds</td>
+          <th>Decimal odds</th>
           <td>{{(1/priceA).toFixed(2)}}</td>
           <td>{{(1/priceB).toFixed(2)}}</td>
         </tr>
         <tr>
-          <td>Fraction odds</td>
+          <th>Fraction odds</th>
           <td>{{convertToFraction(1/priceA.toFixed(4)-1)}}</td>
           <td>{{convertToFraction(1/priceB.toFixed(4)-1)}}</td>
         </tr>
         <tr>
-          <td>Outstanding orders</td>
+          <th>Outstanding orders</th>
           <td>{{outstandingA}}</td>
           <td>{{outstandingB}}</td>
         </tr>
@@ -74,7 +74,7 @@ export default {
   name: 'Vanilla',
   data () {
     return {
-        msg: 'Logarithmic Market Scoring',
+        msg: 'Logarithmic Scoring',
         event:'',
         outstandingA: 0,
         outstandingB: 0,
@@ -94,7 +94,7 @@ export default {
   methods: {
     initFunc(){
       
-      this.msg= 'Logarithmic Market Scoring'
+      this.msg= 'Logarithmic Scoring'
       this.outstandingA= 0
       this.outstandingB= 0
       this.orderA=0

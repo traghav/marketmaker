@@ -126,6 +126,7 @@ export default {
       this.totalPool=0
       this.transactionLog=[]
       this.updateOdds()
+      this.playScenario()
   
     },
     depthInitFunc(){

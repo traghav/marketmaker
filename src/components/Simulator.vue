@@ -110,6 +110,7 @@
           </span>
         </div>
         <div class="executeOrder">
+          <p></p>
           <button v-on:click="playScenario">Execute orders </button>
         </div>
       </div>
@@ -142,7 +143,7 @@
 
       <div class="transaction" v-if="transactionLog.length>0">
         <button v-on:click="txDisplay=!txDisplay"> 
-          <h4>Transaction Log</h4>
+          Transaction Log
         </button>
         <ul id="logs" v-if="txDisplay">
           <p>

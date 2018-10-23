@@ -2,8 +2,8 @@
   <div id="app">
     
     <!-- <HelloWorld/> -->
-<!--     <Vanilla/>
-    <Depth /> -->
+    <Vanilla/>
+    <Depth />
     <Simulator />
   </div>
 </template>
@@ -15,6 +15,7 @@ import Depth from './components/Depth'
 import Simulator from './components/Simulator'
 import './assets/font-awesome-4.7.0/css/font-awesome.css'
 import './assets/style.css'
+// import './assets/main.css'
 export default {
   name: 'App',
   components: {
