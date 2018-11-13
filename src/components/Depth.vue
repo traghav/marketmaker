@@ -1,37 +1,39 @@
-<template>
+git log --pretty=format:'' | wc -l<template>
   <div class="component">
     <div class="title">
         <h1>{{ msg }}</h1>
-        <div class="reset">
-          <h1><a href="#" v-on:click="initFunc">
-            <i class="fa fa-undo"></i>
-          </a></h1>
-        </div>
+        <span class="depthInit">
+          <div class="reset">
+            <h1><a href="#" v-on:click="initFunc" v-scroll-to="'.depthInit'">
+              <i class="fa fa-undo"></i>
+            </a></h1>
+          </div>
+        </span>
     </div>
     <div class="oddsTable">
       <table>
         <tr>
           <td></td>
-          <td>Event A</td>
-          <td>Event B</td>
+          <th>Event A</th>
+          <th>Event B</th>
         </tr>
         <tr>
-          <td>Option pricing</td>
+          <th>Option pricing</th>
           <td>{{priceA.toFixed(4)}}</td>
           <td>{{priceB.toFixed(4)}}</td>
         </tr>
         <tr>
-          <td>Decimal odds</td>
+          <th>Decimal odds</th>
           <td>{{(1/priceA).toFixed(2)}}</td>
           <td>{{(1/priceB).toFixed(2)}}</td>
         </tr>
         <tr>
-          <td>Fraction odds</td>
+          <th>Fraction odds</th>
           <td>{{convertToFraction(1/priceA.toFixed(4)-1)}}</td>
           <td>{{convertToFraction(1/priceB.toFixed(4)-1)}}</td>
         </tr>
         <tr>
-          <td>Outstanding orders</td>
+          <th>Outstanding orders</th>
           <td>{{outstandingA}}</td>
           <td>{{outstandingB}}</td>
         </tr>

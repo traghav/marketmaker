@@ -1,9 +1,10 @@
 <template>
   <div class="component">
+      <span class="dummy"></span>
       <div class="title">
         <h1>{{ msg }}</h1>
         <div class="reset">
-          <h1><a href="#" v-on:click="initFunc">
+          <h1><a href="#" v-on:click="initFunc" v-scroll-to="'.dummy'">
             <i class="fa fa-undo"></i>
           </a></h1>
         </div>
@@ -22,142 +23,144 @@
       </div>
       <button v-on:click="depthdecider=true">Set Market Depth at ${{+this.b}} </button>
     </div>
-    <div v-if="depthdecider==true" class="simulator">
-      <div class="oddsTable">
-        <table>
-          <tr>
-            <td></td>
-            <td>Event A</td>
-            <td>Event B</td>
-          </tr>
-          <tr>
-            <td>Option pricing</td>
-            <td>{{priceA.toFixed(4)}}</td>
-            <td>{{priceB.toFixed(4)}}</td>
-          </tr>
-          <tr>
-            <td>Decimal odds</td>
-            <td>{{(1/priceA).toFixed(2)}}</td>
-            <td>{{(1/priceB).toFixed(2)}}</td>
-          </tr>
-          <tr>
-            <td>Fraction odds</td>
-            <td>{{convertToFraction(1/priceA.toFixed(4)-1)}}</td>
-            <td>{{convertToFraction(1/priceB.toFixed(4)-1)}}</td>
-          </tr>
-          <tr>
-            <td>Outstanding orders</td>
-            <td>{{outstandingA}}</td>
-            <td>{{outstandingB}}</td>
-          </tr>
-        </table>
-      </div>
-      <div class="orders">
-        <div class="mean">
-          <h4>Set Mean</h4>
-          <vue-slide-bar 
-            v-model="mean"
-            class="slider"
-            :min="0"
-            :max="100"
-            :processStyle="sliderCustomzie.processStyle"
-            :lineHeight="sliderCustomzie.lineHeight"
-            :paddingless="true"
-            :tooltipStyles="sliderCustomzie.tooltipStyles"
-            :show-tooltip="false">
-          </vue-slide-bar>
-          <span class="leftmean">
-            <h5>{{(mean/100).toFixed(2)}}</h5>
-          </span>
-          <span class="rightmean">
-            <h5>{{(1-mean/100).toFixed(2)}}</h5>
-          </span>
+    <transition name="fade">
+      <div v-if="depthdecider==true" class="simulator">
+        <div class="oddsTable">
+          <table>
+            <tr>
+              <td></td>
+              <th>Event A</th>
+              <th>Event B</th>
+            </tr>
+            <tr>
+              <th>Option pricing</th>
+              <td>{{priceA.toFixed(4)}}</td>
+              <td>{{priceB.toFixed(4)}}</td>
+            </tr>
+            <tr>
+              <th>Decimal odds</th>
+              <td>{{(1/priceA).toFixed(2)}}</td>
+              <td>{{(1/priceB).toFixed(2)}}</td>
+            </tr>
+            <tr>
+              <th>Fraction odds</th>
+              <td>{{convertToFraction(1/priceA.toFixed(4)-1)}}</td>
+              <td>{{convertToFraction(1/priceB.toFixed(4)-1)}}</td>
+            </tr>
+            <tr>
+              <th>Outstanding orders</th>
+              <td>{{outstandingA}}</td>
+              <td>{{outstandingB}}</td>
+            </tr>
+          </table>
         </div>
-        <div class="variance">
-          <h4>Set Variance</h4>
-          <vue-slide-bar 
-            v-model="variance"
-            class="slider"
-            :min="0"
-            :max="100"
-            :processStyle="sliderCustomzie.processStyle"
-            :lineHeight="sliderCustomzie.lineHeight"
-            :paddingless="true"
-            :tooltipStyles="sliderCustomzie.tooltipStyles"
-            :show-tooltip="false">
-          </vue-slide-bar>
-          <span class="leftvariance">
-            <h5>{{(variance/100).toFixed(2)}}</h5>
-          </span>
-        </div>
-        <div class="orderAmount">
-          <h4>Number of orders</h4>
-          <vue-slide-bar 
-            v-model="orderAmount"
-            class="slider"
-            :min="0"
-            :max="5000"
-            :processStyle="sliderCustomzie.processStyle"
-            :lineHeight="sliderCustomzie.lineHeight"
-            :paddingless="true"
-            :tooltipStyles="sliderCustomzie.tooltipStyles"
-            :show-tooltip="false">
-          </vue-slide-bar>
-          <span class="orderAmount"> 
+        <div class="orders">
+          <div class="mean">
+            <h4>Set Mean</h4>
+            <vue-slide-bar 
+              v-model="mean"
+              class="slider"
+              :min="0"
+              :max="100"
+              :processStyle="sliderCustomzie.processStyle"
+              :lineHeight="sliderCustomzie.lineHeight"
+              :paddingless="true"
+              :tooltipStyles="sliderCustomzie.tooltipStyles"
+              :show-tooltip="false">
+            </vue-slide-bar>
+            <span class="leftmean">
+              <h5>{{(mean/100).toFixed(2)}}</h5>
+            </span>
+            <span class="rightmean">
+              <h5>{{(1-mean/100).toFixed(2)}}</h5>
+            </span>
+          </div>
+          <div class="variance">
+            <h4>Set Variance</h4>
+            <vue-slide-bar 
+              v-model="variance"
+              class="slider"
+              :min="0"
+              :max="100"
+              :processStyle="sliderCustomzie.processStyle"
+              :lineHeight="sliderCustomzie.lineHeight"
+              :paddingless="true"
+              :tooltipStyles="sliderCustomzie.tooltipStyles"
+              :show-tooltip="false">
+            </vue-slide-bar>
+            <span class="leftvariance">
+              <h5>{{(variance/100).toFixed(2)}}</h5>
+            </span>
+          </div>
+          <div class="orderAmount">
+            <h4>Number of orders</h4>
+            <vue-slide-bar 
+              v-model="orderAmount"
+              class="slider"
+              :min="0"
+              :max="5000"
+              :processStyle="sliderCustomzie.processStyle"
+              :lineHeight="sliderCustomzie.lineHeight"
+              :paddingless="true"
+              :tooltipStyles="sliderCustomzie.tooltipStyles"
+              :show-tooltip="false">
+            </vue-slide-bar>
+            <span class="orderAmount"> 
+              <p></p>
+              <input v-model="orderAmount" v-on:keypress="isNumber(event)" placeholder="Order Amount" >
+              
+            </span>
+          </div>
+          <div class="executeOrder">
             <p></p>
-            <input v-model="orderAmount" v-on:keypress="isNumber(event)" placeholder="Order Amount" >
-            
-          </span>
+            <button v-on:click="playScenario">Execute orders </button>
+          </div>
         </div>
-        <div class="executeOrder">
-          <p></p>
-          <button v-on:click="playScenario">Execute orders </button>
+        <br>
+        <div class="marketInformation">
+          <h3>Market Depth ${{b}} </h3>
+          <h3>Total Pool ${{totalPool.toFixed(2)}} </h3>
         </div>
-      </div>
-      <br>
-      <div class="marketInformation">
-        <h3>Market Depth ${{b}} </h3>
-        <h3>Total Pool ${{totalPool.toFixed(2)}} </h3>
-      </div>
-      <div class="chartRegion">
-        <div class="chart">
-          <trend
-          :data="orderHistoryA"
-          :gradient="['#F27612', '#F27612', '#F27612']"
-          auto-draw
-          smooth>
-          </trend>
-        </div>
-        <div class="chart2">
-          <trend
-          :data="orderHistoryB"
-          :gradient="['#DA2A04', '#DA2A04', '#DA2A04']"
-          auto-draw
-          smooth>
-          </trend>
-        </div>
-        <span class="A"><i class="fa fa-circle"></i> Trend Line A</span>
-        <span class="B"><i class="fa fa-circle"></i> Trend Line B</span>
-       </div>
-    
+        <div class="chartRegion">
+          <div class="chart">
+            <trend
+            :data="orderHistoryA"
+            :gradient="['#F27612', '#F27612', '#F27612']"
+            auto-draw
+            smooth>
+            </trend>
+          </div>
+          <div class="chart2">
+            <trend
+            :data="orderHistoryB"
+            :gradient="['#DA2A04', '#DA2A04', '#DA2A04']"
+            auto-draw
+            smooth>
+            </trend>
+          </div>
+          <span class="A"><i class="fa fa-circle"></i> Trend Line A</span>
+          <span class="B"><i class="fa fa-circle"></i> Trend Line B</span>
+         </div>
+      
 
-      <div class="transaction" v-if="transactionLog.length>0">
-        <button v-on:click="txDisplay=!txDisplay"> 
-          Transaction Log
-        </button>
-        <ul id="logs" v-if="txDisplay">
-          <p>
-          Number of transactions {{totalTx}}
-          </p>
-          <li v-for="log in transactionLog">
-            {{ log.messageA }}
-            <br>
-            {{ log.messageB }}
-          </li>
-        </ul>
+        <div class="transaction" v-if="transactionLog.length>0">
+          <button v-on:click="txDisplay=!txDisplay"> 
+            Transaction Log
+          </button>
+          <ul id="logs" v-if="txDisplay">
+            <p>
+            Number of transactions {{totalTx}}
+            </p>
+            <li v-for="log in transactionLog">
+              {{ log.messageA }}
+              <br>
+              {{ log.messageB }}
+            </li>
+          </ul>
+        </div>
+        <hr>
       </div>
-      <hr>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -384,6 +387,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  
+
+
   .component {
     position: relative;
   }

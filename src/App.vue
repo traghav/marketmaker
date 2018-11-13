@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    
-    <!-- <HelloWorld/> -->
+    <PredictionExplainer/>
     <Vanilla/>
     <Depth />
     <Simulator />
@@ -9,17 +8,17 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
 import Vanilla from './components/Vanilla'
 import Depth from './components/Depth'
 import Simulator from './components/Simulator'
+import PredictionExplainer from './components/PredictionExplainer'
 import './assets/font-awesome-4.7.0/css/font-awesome.css'
 import './assets/style.css'
-// import './assets/main.css'
+
 export default {
   name: 'App',
   components: {
-    HelloWorld,
+    PredictionExplainer,
     Vanilla,
     Depth,
     Simulator

@@ -1,9 +1,10 @@
 <template>
   <div class="component">
     <div class="title">
+        <span class="vanillaDummy"></span>
         <h1>{{ msg }}</h1>
         <div class="reset">
-          <h1><a href="#" v-on:click="initFunc">
+          <h1><a href="#" v-on:click="initFunc" v-scroll-to="'.vanillaDummy'">
             <i class="fa fa-undo"></i>
           </a></h1>
         </div>
@@ -60,9 +61,11 @@
         <p>
         Number of transactions {{ transactionLog.length}}
         </p>
-        <li v-for="log in transactionLog">
-          {{ log }}
-        </li>
+        <!-- <transition name="fade"> -->
+          <li v-for="log in transactionLog">
+            {{ log }}
+          </li>
+        <!-- </transition> -->
       </ul>
     </div>
     <hr>

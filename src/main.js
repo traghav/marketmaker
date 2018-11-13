@@ -4,9 +4,11 @@ import Vue from 'vue'
 import Trend from 'vuetrend';
 import App from './App'
 import VueSlideBar from 'vue-slide-bar'
+import VueScrollTo from 'vue-scrollto'
 Vue.config.productionTip = false
 Vue.component('vue-slide-bar', VueSlideBar)
 Vue.use(Trend)
+Vue.use(VueScrollTo)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
